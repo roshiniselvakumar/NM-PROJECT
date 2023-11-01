@@ -45,3 +45,119 @@ This project aims to create a powerful house price prediction tool using machine
 Future Work
 In the future, we can further enhance the model by incorporating additional features, such as economic indicators, and explore more advanced machine learning techniques like deep learning. Continuous model monitoring and updates will also be essential to adapt to changing market conditions.
 By accurately predicting house prices, this project aims to empower individuals and organizations to make informed decisions in the dynamic housing market.
+
+To run the provided code, you need to ensure you have the necessary dependencies installed and have the 'USA_Housing.csv' dataset available in the same directory as your script. Here's a step-by-step guide for running the code:
+
+1. Install Dependencies:
+   Ensure you have the following libraries and frameworks installed. You can install them using pip or conda:
+
+   - Pandas
+   - NumPy
+   - Seaborn
+   - Matplotlib
+   - Scikit-learn
+   - Keras
+
+   For example, you can install Pandas and Scikit-learn using pip:
+
+   ```
+   pip install pandas numpy seaborn matplotlib scikit-learn keras
+   ```
+
+2. Import Libraries:
+   Add the necessary import statements at the beginning of your script:
+
+   ```python
+   import pandas as pd
+   import numpy as np
+   import seaborn as sns
+   import matplotlib.pyplot as plt
+   from sklearn.model_selection import train_test_split
+   from sklearn.preprocessing import MinMaxScaler
+   from keras.layers import Dense, Dropout, LSTM
+   from keras.models import Sequential
+   from sklearn import metrics
+   ```
+
+3. Load the Dataset:
+   Make sure you have the 'USA_Housing.csv' file in the same directory as your script. You can load the dataset as follows:
+
+   ```python
+   HouseDF = pd.read_csv('USA_Housing.csv')
+   ```
+
+4. Data Preprocessing:
+   Ensure that you've reset the index and checked the data information, as shown in your code:
+
+   ```python
+   HouseDF = HouseDF.reset_index()
+   HouseDF.info()
+   ```
+
+5. Data Visualization:
+   The code includes various data visualization steps using Seaborn and Matplotlib. You can run these sections to create plots:
+
+   ```python
+   sns.pairplot(HouseDF)
+   sns.distplot(HouseDF['Price'])
+   sns.heatmap(HouseDF.corr(), annot=True)
+   ```
+
+6. Model Training:
+   Train your model (in this case, it appears to be a regression model) using the specified features and target variable. Be sure to execute the data splitting and normalization steps:
+
+   ```python
+   X = HouseDF[['Avg. Area Income', 'Avg. Area House Age', 'Avg. Area Number of Rooms', 'Avg. Area Number of Bedrooms', 'Area Population']]
+   y = HouseDF['Price']
+
+   X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=101)
+
+   lm = MinMaxScaler(feature_range=(0, 1))
+   lm.fit_transform(X_train, y_train)
+   ```
+
+7. Model Building and Training (Keras):
+   The code appears to build an LSTM model using Keras. Ensure you have the correct data for the model and execute the model building and training:
+
+   ```python
+   # Define and compile your LSTM model
+   model = Sequential()
+   # Add LSTM layers and compile the model
+   model.fit(X_train, y_train, epochs=50)
+   ```
+
+8. Make Predictions:
+   Make predictions using the trained model:
+
+   ```python
+   predictions = lm.predict(X_test)
+   ```
+
+9. Evaluate the Model:
+   Calculate and print evaluation metrics for the model's performance:
+
+   ```python
+   print('MAE:', metrics.mean_absolute_error(y_test, predictions))
+   print('MSE:', metrics.mean_squared_error(y_test, predictions))
+   print('RMSE:', np.sqrt(metrics.mean_squared_error(y_test, predictions))
+   ```
+
+10. Visualization:
+   The code includes several visualizations of the predictions and the original prices. You can run these sections to see the results:
+
+   ```python
+   # Visualize predictions
+   plt.scatter(y_test, predictions)
+   sns.distplot((y_test - predictions), bins=50)
+
+   # Visualize the original and predicted prices over time
+   plt.figure(figsize=(12, 6))
+   plt.plot(y_test, 'b', label='Original Price')
+   plt.plot(predictions, 'r', label='Predicted Price')
+   plt.xlabel('Time')
+   plt.ylabel('Price')
+   plt.legend()
+   plt.show()
+   ```
+
+Make sure you have the correct dataset and data for your regression model and adapt the code as needed to fit your specific use case.
